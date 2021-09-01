@@ -1,5 +1,5 @@
+from discord.ext import commands
 from dotenv import load
-import discord
 import os
 
 load()
@@ -8,21 +8,18 @@ load()
 TOKEN = os.getenv('TOKEN')
 PREFIX = os.getenv('PREFIX')
 
-
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
-
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
-
-        if message.content == PREFIX + "ping":
-            await message.channel.send(f'Pong! Bot Latency: {round (client.latency * 1000)} ms')
-
-        # if message.author != self.user:
-        #     await message.channel.send('YOOOOO')
+with open('badwords') as f:
+    badWords = f.read()
 
 
-# running the client
-client = MyClient()
-client.run(TOKEN)
+bot = commands.Bot(command_prefix=PREFIX)
+
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f'Pong! Bot Latency: {round (bot.latency * 1000)} ms')
+
+
+print("Bot Is Running!")
+
+bot.run(TOKEN)
